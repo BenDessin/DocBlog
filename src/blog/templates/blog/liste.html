@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Accueil du blog</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Le Blog De Docstring</h1>
+    {% for i in posts %}
+        <article>
+            <div class="post-title">
+                <h2> {{ i.title }} </h2>
+
+                <div>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'posts:edit' slug=i.slug %}">Editer</a>
+                        <a href="{% url 'posts:delete' slug=i.slug %}">Supprimer</a>
+                    {% endif %}
+                </div>
+            </div>
+            <h5 class="post-author">Publié par <i> {{ i.author.username }} </i> le {{ i.created_on|date:'j F Y' }}</h5>
+            <p class="post-content"> {{ i.content|safe|truncatewords:20 }} </p>
+            <a href="{% url 'posts:detail' slug=i.slug %}">
+                <button class="btn btn-submit">Lire l'article</button>
+            </a>
+        </article>
+    {% endfor %}
+
+{% endblock %}
